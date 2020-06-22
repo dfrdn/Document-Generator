@@ -2,6 +2,9 @@ import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 import "materialize-css/dist/css/materialize.min.css";
 import "materialize-css/dist/js/materialize.min";
+import { merge } from "lodash";
+
+var expressions = require("angular-expressions");
 
 // The error object contains additional information when logged with JSON.stringify (it contains a properties object containing all suberrors).
 function replaceErrors(value) {
@@ -12,6 +15,38 @@ function replaceErrors(value) {
     }, {});
   }
   return value;
+}
+
+expressions.filters.lower = function (input) {
+  // This condition should be used to make sure that if your input is
+  // undefined, your output will be undefined as well and will not
+  // throw an error
+  if (!input) return input;
+  return input.toLowerCase();
+};
+
+function angularParser(tag) {
+  if (tag === ".") {
+    return {
+      get: function (s) {
+        return s;
+      },
+    };
+  }
+  const expr = expressions.compile(
+    tag.replace(/(’|‘)/g, "'").replace(/(“|”)/g, '"')
+  );
+  return {
+    get: function (scope, context) {
+      let obj = {};
+      const scopeList = context.scopeList;
+      const num = context.num;
+      for (let i = 0, len = num + 1; i < len; i++) {
+        obj = merge(obj, scopeList[i]);
+      }
+      return expr(scope, obj);
+    },
+  };
 }
 
 var output = {};
@@ -96,7 +131,7 @@ function generate() {
     var zip = new PizZip(content);
     var doc;
     try {
-      doc = new Docxtemplater(zip);
+      doc = new Docxtemplater(zip, { parser: angularParser });
     } catch (error) {
       // Catch compilation errors (errors caused by the compilation of the template : misplaced tags)
       errorHandler(error);
