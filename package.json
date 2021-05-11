@@ -29,7 +29,7 @@
     "angular-parser": "^0.3.0",
     "docxtemplater": "^3.17.9",
     "filesaver": "0.0.13",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "materialize-css": "^1.0.0-rc.2",
     "path": "^0.12.7",
     "pizzip": "^3.0.6"
