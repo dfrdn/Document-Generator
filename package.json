@@ -27,7 +27,7 @@
   "dependencies": {
     "angular-expressions": "^1.1.1",
     "angular-parser": "^0.3.0",
-    "docxtemplater": "^3.17.9",
+    "docxtemplater": "^3.31.4",
     "filesaver": "0.0.13",
     "lodash": "^4.17.15",
     "materialize-css": "^1.0.0-rc.2",
